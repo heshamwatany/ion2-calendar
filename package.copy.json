@@ -1,7 +1,7 @@
 {
-  "name": "ion2-calendar-menusifu",
-  "version": "1.0.0",
-  "description": "A date picker for ionic2, @copyright menusifu",
+  "name": "ion2-calendar",
+  "version": "1.1.0-beta.1",
+  "description": "A date picker for ionic2 ",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
@@ -39,7 +39,7 @@
     "Datepicker",
     "date-range"
   ],
-  "author": "Tongyun Wu tywu@menusifu.com",
+  "author": "HsuanLee",
   "license": "MIT",
   "dependencies": {
     "@ngx-translate/core": "^7.0.0",

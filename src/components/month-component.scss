@@ -39,7 +39,7 @@ ion2-month{
   }
   .days .marked p{
     color: rgb(59, 151, 247);
-    font-weight:500;
+    font-weight:200;
   }
 
   .days .today p {
@@ -53,8 +53,8 @@ ion2-month{
   }
 
   .days .on-selected p{
+    font-size: 0.9em;
     color: rgb(59, 151, 247);
-    font-size: 1.3em;
   }
 
   button.days-btn {
@@ -82,6 +82,9 @@ ion2-month{
       border-radius: 50% 0px 0px 50%;
       background-color: rgb(201, 225, 250);
     }
+    &.startSelection p{
+      font-size: 0.9em;
+    }
     &.between{
       background-color: rgba(201, 225, 250, 0.5);
       width: 100%;
@@ -91,17 +94,20 @@ ion2-month{
       border-radius: 0px 50% 50% 0px;
       background-color: rgb(201, 225, 250);
     }
+    &.endSelection p{
+      font-size: 0.9em;
+    }
   }
 
   button.days-btn p {
     margin:0;
-    font-size: 1.2em;
+    font-size: 1.0em;
     color: #333;
   }
 
   button.days-btn.on-selected small{
     transition: bottom .3s;
-    bottom: -14px;
+    bottom: -12px;
   }
 
   button.days-btn small {
@@ -109,7 +115,7 @@ ion2-month{
     display: block;
     left: 0;
     right: 0;
-    bottom: -5px;
+    bottom: -4px;
     position: absolute;
     z-index:1;
     text-align: center;

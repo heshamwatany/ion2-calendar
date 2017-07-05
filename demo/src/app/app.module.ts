@@ -5,7 +5,7 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-
+import { TranslateStore } from "@ngx-translate/core/src/translate.store";
 import { CalendarModule } from "ion2-calendar";
 
 @NgModule({
@@ -28,6 +28,6 @@ import { CalendarModule } from "ion2-calendar";
     HomePage,
     TabsPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, TranslateStore]
 })
 export class AppModule {}

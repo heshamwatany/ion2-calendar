@@ -4,7 +4,7 @@
 import { Injectable } from '@angular/core';
 import { CalendarOriginal, CalendarDay, CalendarMonth, CalendarControllerOptions } from '../calendar.model'
 import * as moment from 'moment';
-
+import * as fns from 'date-fns';
 
 @Injectable()
 export class CalendarService {
@@ -13,6 +13,13 @@ export class CalendarService {
 
     }
 
+    /**
+     * 
+     * 
+     * @param {number} time 
+     * @returns {CalendarOriginal} return month description
+     * @memberof CalendarService
+     */
     createOriginalCalendar(time: number): CalendarOriginal {
 
         const date = new Date(time);
@@ -37,6 +44,19 @@ export class CalendarService {
         return opt.daysConfig.find((n) => day.isSame(n.date,'day'))
     }
 
+    createCalendarDayForMonth(date: Date): CalendarDay {
+        return {
+            time: date.getTime(),
+            isToday: fns.isSameDay(date, new Date()),
+            selected: false,
+            marked: false,
+            cssClass: '',
+            disable: false,
+            title: date.toString(),
+            subTitle: ''
+        };
+    }
+
     createCalendarDay (time: number, opt:CalendarControllerOptions): CalendarDay {
         let _time = moment(time);
         let isToday = moment().isSame(_time, 'days');
@@ -49,10 +69,16 @@ export class CalendarService {
             if (!opt.canBackwardsSelected ){
                 isBetween = !_time.isBetween(_rangeBeg, _rangeEnd,'days','[]');
             }else {
-                isBetween = moment(_time).isBefore(_rangeBeg) ? false : isBetween;
+                //console.log('enter ??? zone');
+                //console.log(`rangeBeg: ${moment(_rangeBeg).toDate()}, rangeEnd: ${moment(_rangeEnd).toDate()}`);
+                //console.log(`create time: ${moment(time).toDate()}`);
+                //console.log(`isBetween1?: ${isBetween}`);
+                if (!fns.isSameDay(_rangeBeg, time)) {
+                    isBetween = moment(_time).isBefore(_rangeBeg) ? false : isBetween;
+                    isBetween = moment(_time).isAfter(_rangeEnd) ? false: isBetween;
+                }
             }
-        }else if (_rangeBeg > 0 && _rangeEnd === 0){
-
+        } else if (_rangeBeg > 0 && _rangeEnd === 0){
 
             if (!opt.canBackwardsSelected ){
                 let _addTime = _time.add('day',1);
@@ -62,7 +88,7 @@ export class CalendarService {
             }
         }
 
-        let _disable = disableWee || isBetween;
+        let _disable = disableWee || !isBetween;
 
         return {
             time: time,

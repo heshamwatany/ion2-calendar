@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import * as fns from 'date-fns';
 export var CalendarService = (function () {
     function CalendarService() {
     }
+    /**
+     *
+     *
+     * @param {number} time
+     * @returns {CalendarOriginal} return month description
+     * @memberof CalendarService
+     */
     CalendarService.prototype.createOriginalCalendar = function (time) {
         var date = new Date(time);
         var year = date.getFullYear();
@@ -23,6 +31,18 @@ export var CalendarService = (function () {
             return null;
         return opt.daysConfig.find(function (n) { return day.isSame(n.date, 'day'); });
     };
+    CalendarService.prototype.createCalendarDayForMonth = function (date) {
+        return {
+            time: date.getTime(),
+            isToday: fns.isSameDay(date, new Date()),
+            selected: false,
+            marked: false,
+            cssClass: '',
+            disable: false,
+            title: date.toString(),
+            subTitle: ''
+        };
+    };
     CalendarService.prototype.createCalendarDay = function (time, opt) {
         var _time = moment(time);
         var isToday = moment().isSame(_time, 'days');
@@ -36,7 +56,14 @@ export var CalendarService = (function () {
                 isBetween = !_time.isBetween(_rangeBeg, _rangeEnd, 'days', '[]');
             }
             else {
-                isBetween = moment(_time).isBefore(_rangeBeg) ? false : isBetween;
+                //console.log('enter ??? zone');
+                //console.log(`rangeBeg: ${moment(_rangeBeg).toDate()}, rangeEnd: ${moment(_rangeEnd).toDate()}`);
+                //console.log(`create time: ${moment(time).toDate()}`);
+                //console.log(`isBetween1?: ${isBetween}`);
+                if (!fns.isSameDay(_rangeBeg, time)) {
+                    isBetween = moment(_time).isBefore(_rangeBeg) ? false : isBetween;
+                    isBetween = moment(_time).isAfter(_rangeEnd) ? false : isBetween;
+                }
             }
         }
         else if (_rangeBeg > 0 && _rangeEnd === 0) {
@@ -48,7 +75,7 @@ export var CalendarService = (function () {
                 isBetween = false;
             }
         }
-        var _disable = disableWee || isBetween;
+        var _disable = disableWee || !isBetween;
         return {
             time: time,
             isToday: isToday,

@@ -25,7 +25,7 @@ export interface CalendarDay {
 }
 export declare class CalendarMonth {
     original: CalendarOriginal;
-    days: Array<CalendarDay | void>;
+    days: Array<CalendarDay>;
 }
 export declare class DayConfig {
     date: Date;
@@ -51,9 +51,11 @@ export interface ModalOptions {
     leaveAnimation?: string;
 }
 export interface CalendarControllerOptions {
+    lang?: string;
+    mode?: string;
     from?: Date;
     cssClass?: string;
-    to?: Date | number;
+    to?: Date;
     isRadio?: boolean;
     id?: string;
     isSaveHistory?: boolean;

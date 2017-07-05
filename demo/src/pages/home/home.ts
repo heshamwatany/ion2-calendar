@@ -11,11 +11,13 @@ export class HomePage {
 
   days:Array<any> = [];
 
+  mode: string = '';
+
   constructor(
     public navCtrl: NavController,
     public calendarCtrl: CalendarController
   ) {
-
+    console.log((new Date()));
   }
 
 
@@ -24,8 +26,8 @@ export class HomePage {
     this.calendarCtrl.openCalendar({
       id:'1',
       title:'basic demo',
-      canBackwardsSelected:true,
-      isSaveHistory:true,
+      canBackwardsSelected:false,
+      isSaveHistory:false,
       showYearPicker:true,
       closeIcon: true
     })
@@ -56,16 +58,14 @@ export class HomePage {
       .then( (res:any) => { console.log(res) })
       .catch( () => {} )
   }
-
   dateRange() {
     this.calendarCtrl.openCalendar({
       id:'4',
-      isRadio: false,
-      canBackwardsSelected:true,
-      isSaveHistory:true,
-      showYearPicker:true,
-
-
+      //canBackwardsSelected:true,
+      //isSaveHistory:false,
+      //showYearPicker:true,
+      lang: 'en',
+      mode: this.mode
     })
       .then( (res:any) => { console.log(res) })
       .catch( () => {} )
@@ -160,6 +160,10 @@ export class HomePage {
       .then( (res:any) => { console.log(res) })
 
       .catch( () => {} )
+  }
+
+  showMode() {
+    console.log(this.mode);
   }
 
 }

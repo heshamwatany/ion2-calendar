@@ -1,25 +1,22 @@
-
-
 calendar-page {
   ion-select {
-    .select-icon>.select-icon-inner{
+    max-width: unset;
+    .select-icon>.select-icon-inner,
+    .select-text {
       color: #fff !important;
     }
-    &.select-ios{
+    &.select-ios {
       max-width: unset;
     }
   }
-
   .calendar-page {
     background-color: #fbfbfb;
   }
-
-  .month-box{
+  .month-box {
     display: inline-block;
     padding-bottom: 1em;
     border-bottom: 1px solid #f1f1f1;
   }
-
   h4 {
     font-weight: 400;
     font-size: 1.8rem;
@@ -28,7 +25,76 @@ calendar-page {
     margin: 1rem 0 0;
     color: #929292;
   }
+  .show-dates-bar {
+    padding: 0;
+    // box-shadow: 0 0 0 rgb(158, 158, 158);
+  }
+
+  .show-dates-bar.toolbar.toolbar-md {
+    // min-height: 36px;
+    min-height: 36px;
+    max-height: 36px;
+  }
+
+  .show-dates-bar.toolbar.toolbar-ios {
+    min-height: 36px;
+    max-height: 36px;
+  }
+
+  .show-dates-bar.toolbar-md {
+    height: 36px;
+  }
+  .slash {
+    font-size: 100%;
+    font-weight: bold;
+  }
+  .date-items {
+    margin: 0;
+    color: #fff;
+    height: 36px;
+    width: 100%;
+    background-color: #387ef5;
+    padding: 0px 5px  0px 5px ;
+  }
+  .date-items li:nth-of-type(2n) {
+    list-style-type: none;
+    display: block;
+    float: left;
+    width: 33%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3em;
+  }
+
+  .date-items li:nth-of-type(2n+1) {
+    list-style-type: none;
+    display: block;
+    float: left;
+    width: 33%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+  }
+
+  .date-items .full-row {
+    list-style-type: none;
+    display: block;
+    width: 99% !important;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em !important;
+  }
+
+  .button-md {
+    margin: 0 0 0 0;
+  }
+
+  .button-ios {
+    margin: 0 0 0 0;
+  }
+
+  [noScroll] {
+    overflow: hidden;
+  }
 
 }
-
-

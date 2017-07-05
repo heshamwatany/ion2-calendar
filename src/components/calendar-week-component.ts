@@ -1,11 +1,10 @@
 import { Component, Input } from '@angular/core';
-
 @Component({
     selector: 'calendar-week-title',
     template:`
         <ion-toolbar class="week-toolbar"  no-border-top >
             <ul [class]="'week-title ' + color">
-                <li *ngFor="let w of _weekArray">{{w}}</li>
+                <li *ngFor="let w of _weekArray">{{w | translate}}</li>
             </ul>
         </ion-toolbar>
     `,

@@ -3,29 +3,32 @@ import { ModalController } from 'ionic-angular';
 
 import { ModalOptions, CalendarControllerOptions } from './calendar.model'
 import { CalendarComponent } from "./components/calendar-component";
-
+import * as fns from 'date-fns';
 
 @Injectable()
 export class CalendarController {
 
     isRadio: boolean;
     constructor(
-        public modalCtrl: ModalController
-    ) { }
+        public modalCtrl: ModalController) { }
 
     openCalendar(calendarOptions: CalendarControllerOptions, modalOptions:ModalOptions = {}):any {
 
         let _arr:Array<any> = [];
+        let cur = new Date();
+
 
         let {
-            from = new Date(),
-            to = 0,
+            lang = 'en',
+            mode = 'day',
+            from = fns.subYears(cur, 2),
+            to = cur,
             cssClass = '',
             weekStartDay = 0,
             isRadio = true,
-            canBackwardsSelected = false,
+            canBackwardsSelected = true,
             disableWeekdays = _arr,
-            closeLabel = 'cancel',
+            closeLabel = 'Cancel',
             closeIcon = false,
             id = '',
             isSaveHistory = false,
@@ -33,33 +36,35 @@ export class CalendarController {
             title = 'Calendar',
             weekdaysTitle = "Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),
             daysConfig = _arr,
-            countNextMonths = 3,
-            showYearPicker = false,
+            countNextMonths = 1,
+            showYearPicker = true,
         } = calendarOptions || {};
 
         let options: CalendarControllerOptions = {
+            lang: lang,
+            mode: mode,
             from:from,
             to:to,
             cssClass:cssClass,
-            isRadio:isRadio,
+            isRadio: mode === 'day',
             weekStartDay:weekStartDay,
             canBackwardsSelected:canBackwardsSelected,
             closeLabel:closeLabel,
             closeIcon:closeIcon,
             id:id,
             isSaveHistory:isSaveHistory,
-            defaultDate:calendarOptions.defaultDate || from ,
+            defaultDate:calendarOptions.defaultDate || to ,
             disableWeekdays:disableWeekdays,
             monthTitle:monthTitle,
-            title:title,
+            title:`Mode: By ${mode.charAt(0).toUpperCase() + mode.slice(1)}`,
             weekdaysTitle:weekdaysTitle,
             daysConfig:daysConfig,
             countNextMonths:countNextMonths,
-            showYearPicker:showYearPicker,
+            showYearPicker: mode === 'day' || mode === 'week'|| mode === 'custom',
         };
 
         let calendarModal = this.modalCtrl.create(CalendarComponent, Object.assign({
-            options:options
+            options:options,
         },options),modalOptions);
 
         calendarModal.present();
@@ -79,9 +84,9 @@ export class CalendarController {
                         result.from = data[0];
                         result.to = data[1];
                     }
-                    resolve(result)
-                }else {
-                    reject('cancelled')
+                    resolve(result);
+                } else {
+                    reject('cancelled');
                 }
             });
         });

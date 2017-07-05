@@ -1,0 +1,51 @@
+<ion-header>
+
+    <ion-navbar [color]="_color">
+
+        <ion-buttons start [hidden]="!showYearPicker">
+            <ion-select [(ngModel)]="year" (ngModelChange)="changedYearSelection()" interface="popover">
+                <ion-option *ngFor="let y of years" value="{{y}}">{{y}}</ion-option>
+            </ion-select>
+        </ion-buttons>
+
+        <ion-title>{{title}}</ion-title>
+
+        <ion-buttons end>
+            <button ion-button clear *ngIf="closeLabel !== '' && !closeIcon" (click)="onCancel()">
+                        {{closeLabel}}
+                    </button>
+            <button ion-button icon-only clear *ngIf="closeLabel === '' || closeIcon" (click)="onCancel()">
+                        <ion-icon name="close"></ion-icon>
+                    </button>
+            <button ion-button icon-only clear [disabled]="!canDone()" (click)="done()">
+                        <ion-icon name="checkmark"></ion-icon>
+                    </button>
+        </ion-buttons>
+
+    </ion-navbar>
+    <ion-toolbar class="show-dates-bar" no-border-top>
+        <ul class="date-items">
+            <li *ngIf="dayTemp[0]">{{ dayTemp[0].time | date: 'EEEE, dd MMM y' }}</li>
+            <li *ngIf="_d.isRadio == false && dayTemp[1]" class="slash">/</li>
+            <li *ngIf="_d.isRadio == false && dayTemp[1]">{{ dayTemp[1].time | date: 'EEEE, dd MMM y' }}</li>
+        </ul>
+    </ion-toolbar>
+    <calendar-week-title [color]="_color" [weekArray]="weekdaysTitle" [weekStart]="weekStartDay">
+    </calendar-week-title>
+</ion-header>
+
+<ion-content (ionScroll)="onScroll($event)" class="calendar-page" [ngClass]="{'multiSelection': !options.isRadio}">
+
+    <div #months>
+        <div *ngFor="let month of calendarMonths;let i = index;" class="month-box" [attr.id]="'month-' + i">
+            <h4 class="text-center month-title">{{month.original.date | date:monthTitleFilterStr}}</h4>
+            <ion2-month [month]="month" [isRadio]="options.isRadio" [isSaveHistory]="isSaveHistory" [id]="_id" (onChange)="onChange($event)"
+                [(ngModel)]="dayTemp"></ion2-month>
+        </div>
+    </div>
+
+    <ion-infinite-scroll (ionInfinite)="nextMonth($event)">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+</ion-content>

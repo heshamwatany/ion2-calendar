@@ -1,19 +1,19 @@
-import { Component, ChangeDetectorRef, Input, Output, EventEmitter, OnInit, forwardRef } from '@angular/core';
-
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import {ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import * as moment from 'moment';
 
 import {CalendarDay, CalendarMonth} from '../calendar.model'
 
 export const MONTH_VALUE_ACCESSOR: any = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => MonthComponent),
-    multi: true,
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => MonthComponent),
+  multi: true,
 };
 
 @Component({
-    selector: 'ion2-month',
-    providers: [MONTH_VALUE_ACCESSOR],
-    template: `        
+  selector: 'ion2-month',
+  providers: [MONTH_VALUE_ACCESSOR],
+  template: `        
         <div *ngIf="isRadio">
             <div class="days-box">
                 <div class="days" *ngFor="let day of month.days">
@@ -49,134 +49,139 @@ export const MONTH_VALUE_ACCESSOR: any = {
                 </div>
             </div>
         </div>
-
     `,
 })
-export class MonthComponent implements ControlValueAccessor, OnInit{
+export class MonthComponent implements ControlValueAccessor, OnInit {
+  @Input() month: CalendarMonth;
+  @Input() isRadio: boolean;
+  @Input() isSaveHistory: boolean;
+  @Input() id: any;
+  @Input() mode: string;
 
-    @Input() month: CalendarMonth;
-    @Input() isRadio: boolean;
-    @Input() isSaveHistory: boolean;
-    @Input() id: any;
+  @Output() onChange: EventEmitter<any> = new EventEmitter();
+  @Output() onSelectDate: EventEmitter<any> = new EventEmitter();
+  _date: Array<CalendarDay|null> = [null, null];
 
-    @Output() onChange: EventEmitter<any> = new EventEmitter();
+  _onChanged: Function;
+  _onTouched: Function;
 
-    _date: Array<CalendarDay|null> = [null,null];
+  constructor(public ref: ChangeDetectorRef, ) {}
 
-    _onChanged: Function;
-    _onTouched: Function;
+  ngOnInit() { this._date = [null, null]; }
 
-    constructor(
-        public ref: ChangeDetectorRef,
-    ) {
+  writeValue(obj: any): void { this._date = obj; }
 
+  registerOnChange(fn: any): void { this._onChanged = fn; }
+
+  registerOnTouched(fn: any): void { this._onTouched = fn; }
+
+  isEndSelection(day: CalendarDay): boolean {
+    if (this.isRadio || !Array.isArray(this._date) || this._date[1] === null) {
+      return false;
     }
 
-    ngOnInit() {
-        this._date = [null,null];
+    return this._date[1].time === day.time;
+  }
+
+  isBetween(day: CalendarDay): boolean {
+    if (this.isRadio || !Array.isArray(this._date)) {
+      return false;
     }
 
-    writeValue(obj: any): void {
-        this._date = obj;
+    let start = 0;
+    let end = 0;
+
+    if (this._date[0] === null) {
+      return false
+    } else {
+      start = this._date[0].time;
     }
 
-    registerOnChange(fn: any): void {
-        this._onChanged = fn;
+    if (this._date[1] === null) {
+      return false
+    } else {
+      end = this._date[1].time;
     }
 
-    registerOnTouched(fn: any): void {
-        this._onTouched = fn;
+    return day.time < end && day.time > start;
+  }
+
+  isStartSelection(day: CalendarDay): boolean {
+    if (this.isRadio || !Array.isArray(this._date) || this._date[0] === null) {
+      return false;
     }
 
-    isEndSelection(day: CalendarDay): boolean {
-        if(this.isRadio || !Array.isArray(this._date) || this._date[1] === null) {
-            return false;
+    return this._date[0].time === day.time && this._date[1] !== null;
+  }
+
+  isSelected(time: number): boolean {
+    if (Array.isArray(this._date)) {
+      if (this._date[0] !== null) {
+        return time === this._date[0].time;
+      }
+
+      if (this._date[1] !== null) {
+        return time === this._date[1].time;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  onSelected(item: any) {
+    this.ref.detectChanges();
+    if (this.mode === 'custom') {
+      if (this._date[0] === null) {
+        this._date[0] = item;
+      } else if (this._date[1] === null) {
+        if (this._date[0].time < item.time) {
+          this._date[1] = item;
+        } else if (this._date[0].time > item.time) {
+          this._date[1] = this._date[0];
+          this._date[0] = item;
         }
-
-        return this._date[1].time === day.time;
-    }
-
-    isBetween(day: CalendarDay): boolean {
-
-        if(this.isRadio || !Array.isArray(this._date)) {
-            return false;
-        }
-
-        let start = 0;
-        let end = 0;
-
-        if(this._date[0] === null){
-            return false
-        }else {
-            start = this._date[0].time;
-        }
-
-        if(this._date[1] === null){
-            return false
-        }else {
-            end = this._date[1].time;
-        }
-
-        return day.time < end && day.time > start;
-
-    }
-
-    isStartSelection(day: CalendarDay): boolean {
-        if(this.isRadio || !Array.isArray(this._date) || this._date[0] === null) {
-            return false;
-        }
-
-        return this._date[0].time === day.time && this._date[1] !== null;
-    }
-
-    isSelected(time: number): boolean {
-        if(Array.isArray(this._date)){
-
-            if(this._date[0] !== null){
-                return time === this._date[0].time
-            }
-
-            if(this._date[1] !== null){
-                return time === this._date[1].time
-            }
-        }else {
-            return false
-        }
-    }
-
-    onSelected(item: any) {
-        item.selected = true;
+      } else {
+        this._date[0].selected = false;
+        this._date[1].selected = false;
         this.ref.detectChanges();
-        if(this.isRadio) {
-            this._date[0] = item;
-
-            this.onChange.emit(this._date);
-            return;
-        }
-
-        if(this._date[0] === null) {
-            this._date[0] = item;
-
-            this.ref.detectChanges();
-
-        }else if(this._date[1] === null) {
-            if(this._date[0].time < item.time){
-                this._date[1] = item;
-            }else {
-                this._date[1] = this._date[0];
-                this._date[0] = item;
-            }
-
-            this.ref.detectChanges();
-        }else {
-            this._date[0] = item;
-            this._date[1] = null;
-        }
-
-        this.onChange.emit(this._date);
-
-        this.ref.detectChanges();
-
+        this._date[0] = item;
+        this._date[1] = null;
+      }
+      this.ref.detectChanges();
+    } else if (this.isRadio) {
+      item.selected = true;
+      if (this._date[0] !== null) {
+          this._date[0].selected = false;
+      }
+      this._date[0] = item;
+      this.onChange.emit(this._date);
+      // return;
+    } else {
+      this.onSelectDate.emit({month: this.month, date: item});
     }
 
+    // if(this._date[0] === null) {
+    //     this._date[0] = item;
+
+    //     this.ref.detectChanges();
+
+    // }else if(this._date[1] === null) {
+    //     if(this._date[0].time < item.time){
+    //         this._date[1] = item;
+    //     }else {
+    //         this._date[1] = this._date[0];
+    //         this._date[0] = item;
+    //     }
+
+    //     this.ref.detectChanges();
+    // }else {
+    //     this._date[0] = item;
+    //     this._date[1] = null;
+    // }
+
+
+
+    // this.onChange.emit(this._date);
+    this.ref.detectChanges();
+  }
 }
