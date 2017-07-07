@@ -62,7 +62,7 @@ import { TranslateService } from '@ngx-translate/core';
       </ion-infinite-scroll>
   </ion-content>
 
-  <ion-content *ngIf="mode === 'monh'" no-bounce>
+  <ion-content *ngIf="mode === 'month'" no-bounce>
     <monthpick [today]="defaultDate" (onSelectMonth)="selectMonthHandler($event)"></monthpick>
   </ion-content>
   <ion-footer no-shadow>
@@ -117,7 +117,7 @@ export class CalendarComponent {
       this.scrollToDefaultDate();
     }
 
-    if (this.content.enableScrollListener && this.scrollBackwards) {
+    if (this.mode !== 'month' && this.content.enableScrollListener && this.scrollBackwards) {
       this.content.enableScrollListener();
     }
   }

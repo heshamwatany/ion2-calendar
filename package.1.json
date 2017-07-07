@@ -1,21 +1,21 @@
 {
-  "name": "ion2-calendar-menusifu",
-  "version": "1.0.12",
-  "description": "A date picker for ionic2, @copyright menusifu",
+  "name": "ion2-calendar",
+  "version": "1.1.0-beta.1",
+  "description": "A date picker for ionic2 ",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
     "ngc": "ngc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf aot dist && npm run ngc && gulp copy-html && gulp copy-scss && gulp dist2nm",
+    "build": "rm -rf aot dist && npm run ngc && gulp copy-html && gulp copy-scss && gulp dist2nm && cd ./demo && ionic serve",
     "lint": "./node_modules/.bin/tslint -c tslint.json src/**/*.ts"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wutongy/ion2-calendar.git"
+    "url": "https://github.com/HsuanXyz/ion2-calendar.git"
   },
   "devDependencies": {
-    "@angular/common": "4.2.5",
+    "@angular/common": "2.4.8",
     "@angular/compiler": "2.4.8",
     "@angular/compiler-cli": "2.4.8",
     "@angular/core": "2.4.8",
@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "2.4.8",
     "@angular/platform-server": "2.4.8",
     "@ionic/storage": "2.0.0",
+    "date-fns": "^2.0.0-alpha.1",
     "ionic-angular": "2.3.0",
     "rxjs": "5.0.1",
     "sw-toolbox": "3.4.0",
@@ -38,14 +39,14 @@
     "Datepicker",
     "date-range"
   ],
-  "author": "Tongyun Wu tywu@menusifu.com",
+  "author": "HsuanLee",
   "license": "MIT",
   "dependencies": {
     "@ngx-translate/core": "^7.0.0",
     "@ngx-translate/http-loader": "^0.1.0",
     "gulp": "^3.9.1",
+    "has-flag": "^2.0.0",
     "moment": "^2.18.1",
-    "typescript": "2.0.9",
-    "date-fns": "^2.0.0-alpha.1"
+    "typescript": "2.0.9"
   }
 }

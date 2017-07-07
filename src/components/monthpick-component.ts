@@ -6,15 +6,15 @@ import * as fns from 'date-fns';
     selector: 'monthpick',
     template: `
             <div class="row months-controls">
-                <div class="col col-25" text-left>
+                <div class="arrow-left" text-left>
                     <button [disabled]="shouldBackwardDisabled()" ion-button icon-only clear (click)="prevYear()">
                         <ion-icon name="arrow-back"></ion-icon>
                     </button>
                 </div>
-                <div text-center class="col col-50 selectedYearsLabel">
+                <div text-center class="selectedYearsLabel">
                     <h2 class="selectedYearLabel">{{ year }}</h2>
                 </div>
-                <div class="col col-25" text-right>
+                <div class="arrow-right" text-right>
                     <button [disabled]="shouldForwardDisabled()" ion-button icon-only clear (click)="nextYear()">
                         <ion-icon name="arrow-forward"></ion-icon>
                     </button>
@@ -31,19 +31,39 @@ import * as fns from 'date-fns';
         `,
     styles: [`
     .months-controls ion-col[width-25] button {
-        margin-top: 20% !important;
+        margin-top: 25% !important;
     }
 
     .months-controls {
         margin-top: 1.8rem;
+        font-size: 0;
+        display: flex;
     }
+
+    .arrow-left {
+        width: 25% !important;
+        display: inline-block !important;
+    }
+
+    .arrow-right {
+        width: 25% !important;
+        display: inline-block !important;
+    }
+
 
     button {
         max-height: 32px;
     }
 
+    .selectedYearsLabel {
+        width: 49% !important;
+        display: inline-block !important;
+        text-align: center;
+    }
+
     .selectedYearLabel {
         font-weight: bold;
+        text-align: center !important;
     }
 
     .month-cell {
